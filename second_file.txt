@@ -1,8 +1,0 @@
-tests
-new row for test
-<<<<<<< HEAD
-test3
-test4
-=======
-test3
->>>>>>> c223500... test
