@@ -1,18 +1,36 @@
 package com.nazar;
 
-import java.io.IOException;
 import java.nio.file.*;
 
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
         Path oddFiles = Paths.get("E:\\test_rep\\data\\odd");
         Path evenFiles = Paths.get("E:\\test_rep\\data\\even");
         Path resultingPath = Paths.get("E:\\test_rep\\data\\result");
 
         moveFilesToDir(oddFiles, resultingPath, true);
         moveFilesToDir(evenFiles, resultingPath, false);
+
+        //convert
+        Path page = Paths.get("E:\\test_rep\\data\\result\\1.jpg");
+        Path result = Paths.get("E:\\test_rep\\data\\result.pdf");
+        convertToPDF(resultingPath, result);
+    }
+
+    public static void convertToPDF(Path sourceDir, Path destinationPDF) {
+        try {
+            ConvertJPEG converter = new ConvertJPEG(destinationPDF);
+            converter.init();
+            DirectoryStream<Path> stream = Files.newDirectoryStream(sourceDir);
+            for (Path file: stream) {
+                converter.setSource(file);
+                converter.convert();
+            }
+            converter.close();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 
     public static void copyFiles(Path source, Path target) {
@@ -34,8 +52,6 @@ public class Main {
                 i = i + 2;
             }
         } catch (Exception e) {
-            // IOException can never be thrown by the iteration.
-            // In this snippet, it can only be thrown by newDirectoryStream.
             System.err.println(e);
         }
     }
